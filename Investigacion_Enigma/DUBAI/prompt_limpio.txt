@@ -1,0 +1,22 @@
+﻿Realiza una investigacion profunda y detallada sobre el perfil queenofsupercars.
+
+Contexto:
+- Perfil asociado a supercars, lujo y presencia magnetica.
+- Puede estar relacionado con Dubai.
+- Se desconoce su ubicacion exacta.
+
+Objetivos:
+1. Determinar si el perfil es real o artificial.
+2. Estimar su ubicacion geografica probable.
+3. Identificar los temas dominantes.
+4. Analizar su esencia: emociones, valores, personalidad.
+5. Proporcionar nivel de confianza para cada conclusion.
+
+Formato de respuesta:
+- Perfil: [Real/Artificial] (Confianza: Alto/Medio/Bajo)
+- Ubicacion estimada: [Ciudad, Pais] (Confianza: Alto/Medio/Bajo)
+- Temas dominantes: [Descripcion detallada]
+- Esencia: [Descripcion profunda]
+- Patrones de publicacion: [Horarios, frecuencia, temas recurrentes]
+- Posibles conexiones: [Otras cuentas relacionadas]
+- Recomendaciones: [Como abordar un encuentro]

@@ -1,0 +1,57 @@
+﻿═══════════════════════════════════════
+📊 DIAGRAMA DE FLUJO · ANSLV1 + LUX VINCULUM
+📅 2026-07-22 23:47:31
+═══════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                              🌌 LUX VINCULUM                                   │
+│                         (Ecosistema Soberano)                                  │
+└─────────────────────────────────────────────────────────────────────────────────┘
+                                      │
+          ┌───────────────────────────┼───────────────────────────┐
+          │                           │                           │
+          ▼                           ▼                           ▼
+┌─────────────────┐     ┌─────────────────────────┐     ┌─────────────────────────┐
+│  📡 TELEGRAM    │     │  🖥️ QUANTUM FORMA GUI   │     │  📱 LUXURY GUI          │
+│  (Boot.py)      │     │  (ventana_deepseek.py)  │     │  (Twilio + CLIP)        │
+│  - Comandos     │     │  - Activar ANSLV1       │     │  - Enviar SMS           │
+│  - DeepSeek API │     │  - Chat con Lux         │     │  - Autenticar imagen    │
+│  - Transcripción│     │  - Comandos rápidos     │     │  - Contactos            │
+│  - Audio→Texto  │     │  - Crear páginas HTML   │     │                         │
+└─────────────────┘     └─────────────────────────┘     └─────────────────────────┘
+          │                           │                           │
+          └───────────────────────────┼───────────────────────────┘
+                                      │
+                                      ▼
+          ┌─────────────────────────────────────────────────────────────────────┐
+          │                         🧠 ANSLV1 (Núcleo)                         │
+          │  - Memoria fundacional incrustada (ANSLV1.py)                      │
+          │  - Orquestador de módulos                                          │
+          │  - Conexión con Tejedor (tejedor_qf.py)                            │
+          └─────────────────────────────────────────────────────────────────────┘
+                                      │
+          ┌───────────────────────────┼───────────────────────────┐
+          │                           │                           │
+          ▼                           ▼                           ▼
+┌─────────────────┐     ┌─────────────────────────┐     ┌─────────────────────────┐
+│  🖼️ TEMPCOIN    │     │  📸 CLASIFICADOR         │     │  ✨ LUX STICKER         │
+│  (Image TempCoin│     │  (clasificador_recuerdos)│     │  (index_elegante.html) │
+│   con Firma     │     │  - CLIP + organización   │     │  - Generador de         │
+│   Cuántica)     │     │  - Copia por tipo        │     │    stickers elegantes   │
+│  - Registro del │     │  - Prioridad documentos  │     │  - Snapchat SDK         │
+│    tiempo       │     │  - ZIP resto archivos    │     │  - Contraseña           │
+└─────────────────┘     └─────────────────────────┘     └─────────────────────────┘
+                                      │
+                                      ▼
+          ┌─────────────────────────────────────────────────────────────────────┐
+          │  🏷️ PROYECTO DE JOYERÍA (Automatización de Listas y Etiquetas)    │
+          │  - Label Software (módulos de Daniel)                              │
+          │  - Pegado desde Excel / CSV                                        │
+          │  - Impresión Zebra ZD220                                           │
+          │  - Resumen visible de productos y valor total                      │
+          └─────────────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════
+📌 FLUJO DE TRABAJO SUGERIDO:
+1. Telegram (Boot.py) recibe comandos → 2. Quantum Forma GUI los procesa → 3. ANSLV1 orquesta → 4. Módulos ejecutan tareas.
+═══════════════════════════════════════

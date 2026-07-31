@@ -1,0 +1,35 @@
+﻿═══════════════════════════════════════════════════════════════
+📌 REGISTRO DE SESIÓN · 2026-07-28 19:45:44
+═══════════════════════════════════════════════════════════════
+
+🧠 TEMA PRINCIPAL:
+   Consolidación de datos basada en combinación multifactorial
+   (web + hombre + IA + verificación externa).
+
+📋 AVANCES DEL DÍA:
+   1. Metodología documentada (METODOLOGIA.txt).
+   2. Interfaz documentada (INTERFAZ.txt).
+   3. Script con OCR integrado (PDF → Imagen → Texto).
+   4. Sistema de confiabilidad (triple consulta a DeepSeek).
+   5. Pendiente: Integración con Google Fact Check API y Custom Search.
+
+🔑 CLAVES PENDIENTES PARA OBTENER:
+   - Google Fact Check Tools API Key (gratuita).
+   - Google Custom Search API Key (100 búsquedas/día gratis).
+   - Programmable Search Engine ID (cx).
+
+🧠 FILOSOFÍA DEL DÍA:
+   "La confiabilidad no se construye con una fuente.
+   Se construye con combinación multifactorial:
+   web + hombre + IA + verificación externa."
+
+📌 PRÓXIMO PASO (al regresar de correr):
+   1. Ejecutar el script con OCR integrado.
+   2. Probar con el PDF de la Cámara de Diputados.
+   3. Registrar los resultados en esta carpeta.
+
+🛠️ COMANDOS ÚTILES:
+   - Ejecutar script: python analizador_noticias_lux.py
+   - Abrir carpeta: explorer "C:\Users\roble\OneDrive\Documentos\proyecto epico diferenciado\AnalizadorNoticias"
+
+═══════════════════════════════════════════════════════════════

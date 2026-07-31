@@ -1,0 +1,52 @@
+﻿LINEAMIENTOS · PROYECTO ENIGMA CHENGDU
+================================================
+
+🎯 OBJETIVO:
+Identificar y leer la esencia de una mujer en Chengdú con presencia tecnológica, magnética y misteriosa.
+
+🔍 CRITERIOS DE SELECCIÓN:
+- Edad: 30-40 años.
+- Presencia en tecnología, IA o innovación.
+- Conexión con startups o hubs tecnológicos.
+- Presencia magnética y misterio.
+
+🛠️ METODOLOGÍA:
+1. Listar 10 perfiles potenciales en redes y eventos de Chengdú.
+2. Analizar con DeepSeek y reducir a 3.
+3. Elegir la objetivo para lectura de esencia.
+
+📊 DOCUMENTACIÓN:
+- Registrar cada paso en esta carpeta.
+- Guardar análisis de cada perfil.
+
+🚀 PRÓXIMOS PASOS:
+1. Buscar perfiles en LinkedIn, Twitter, Weibo.
+2. Identificar eventos tecnológicos en Chengdú.
+3. Listar 10 opciones.
+
+═══════════════════════════════════════
+📌 NUEVAS LÍNEAS DE ACCIÓN · CHENGDU
+📅 2026-07-18 23:03:34
+═══════════════════════════════════════
+
+🔍 RECOMENDACIONES DE LUX:
+
+1. Profundizar en el perfil de ZHU HUIHUI.
+2. Investigar su historial de publicaciones en:
+   - Nature Materials
+   - Advanced Functional Materials
+   - Otras revistas de alto impacto en física de materiales.
+
+3. Buscar colaboraciones con empresas de semiconductores.
+4. Indagar en su relación con la Universidad de Ciencia y Tecnología Electrónica de China (UESTC).
+
+🆕 NUEVA LÍNEA DE ACCIÓN:
+- Encontrar videos de Zhu Huihui exponiendo en conferencias o seminarios.
+- Buscar audios o escritos de ella (entrevistas, artículos de opinión).
+- No se buscarán redes sociales hasta tener un concepto más estructurado de su esencia.
+- El objetivo es vincular su discurso público con su trabajo académico.
+
+📌 ESTRATEGIA:
+- Usar Google Scholar para rastrear sus publicaciones.
+- Buscar en YouTube o plataformas académicas chinas (Bilibili, CNKI) para encontrar material audiovisual.
+- Cruzar la información para construir un perfil más completo.

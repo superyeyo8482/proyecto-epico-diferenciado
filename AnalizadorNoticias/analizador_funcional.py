@@ -1,0 +1,322 @@
+﻿# Analizador de Noticias · Lux Vinculum
+# Versión funcional con OCR incluido
+
+import tkinter as tk
+from tkinter import ttk, filedialog, messagebox, scrolledtext
+import json
+import requests
+import os
+import sys
+from datetime import datetime
+import threading
+
+# ====================================================
+# VERIFICAR DEPENDENCIAS
+# ====================================================
+
+print("🔍 Cargando dependencias...")
+
+try:
+    import fitz  # pymupdf
+    print("✅ pymupdf cargado")
+except ImportError:
+    print("❌ pymupdf no instalado. Ejecuta: pip install pymupdf")
+    sys.exit(1)
+
+try:
+    import pytesseract
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+    from PIL import Image
+    import io
+    print("✅ pytesseract + pillow cargados")
+except ImportError:
+    print("❌ pytesseract o pillow no instalados. Ejecuta: pip install pytesseract pillow")
+    sys.exit(1)
+
+# ====================================================
+# CONFIGURACIÓN API
+# ====================================================
+
+SERPER_KEY = "1d58d52768b9534c6c867e6c4600f372e73ddeec"
+DEEPSEEK_KEY = "sk-23515b29bff54c93b1e6ad4479408b41"
+
+# ====================================================
+# FUNCIÓN OCR CON PYMUPDF + TESSERACT
+# ====================================================
+
+def extraer_texto_desde_pdf(pdf_path, callback=None):
+    """Extrae texto de PDF escaneado usando pymupdf + Tesseract OCR."""
+    try:
+        doc = fitz.open(pdf_path)
+        texto_completo = ""
+        total_paginas = len(doc)
+        
+        for i, page in enumerate(doc):
+            if callback:
+                callback(f"📄 Procesando página {i+1}/{total_paginas}...")
+            
+            # Convertir página a imagen
+            pix = page.get_pixmap(dpi=200)
+            img_data = pix.tobytes("png")
+            img = Image.open(io.BytesIO(img_data))
+            
+            # Aplicar OCR
+            texto_pagina = pytesseract.image_to_string(img, lang='spa+eng')
+            texto_completo += f"--- Página {i+1} ---\n{texto_pagina}\n\n"
+        
+        doc.close()
+        return texto_completo, None
+    except Exception as e:
+        return None, f"❌ Error en OCR: {str(e)}"
+
+# ====================================================
+# FUNCIONES DE ANÁLISIS
+# ====================================================
+
+def buscar_en_serper(query):
+    url = "https://google.serper.dev/search"
+    headers = {"X-API-KEY": SERPER_KEY, "Content-Type": "application/json"}
+    payload = {"q": query, "num": 10}
+    try:
+        response = requests.post(url, headers=headers, json=payload)
+        if response.status_code == 200:
+            return response.json()
+        return {"error": f"HTTP {response.status_code}"}
+    except Exception as e:
+        return {"error": str(e)}
+
+def extraer_titulares(texto):
+    lineas = texto.split('\n')
+    titulares = []
+    for linea in lineas:
+        linea = linea.strip()
+        if len(linea) > 20 and linea[0].isupper():
+            if not linea.startswith('--- Página') and not linea.isupper():
+                titulares.append(linea)
+    return titulares[:30]
+
+def analizar_titular(titular):
+    resultados = buscar_en_serper(titular)
+    if "error" in resultados:
+        return {"titular": titular, "error": resultados["error"], "eco": 0, "nivel": "❌ Error", "fuentes": []}
+    
+    organic = resultados.get("organic", [])
+    total = len(organic)
+    
+    if total >= 10:
+        nivel, color = "🔵 ALTO", "green"
+    elif total >= 5:
+        nivel, color = "🟡 MEDIO", "yellow"
+    elif total >= 2:
+        nivel, color = "🟠 BAJO", "orange"
+    else:
+        nivel, color = "🔴 MUY BAJO", "red"
+    
+    fuentes = [{"titulo": item.get("title", "Sin título"), "link": item.get("link", "#")} for item in organic[:5]]
+    return {"titular": titular, "error": None, "eco": total, "nivel": nivel, "color": color, "fuentes": fuentes}
+
+def generar_contexto(titulares_importantes):
+    if not titulares_importantes:
+        return "No hay noticias importantes para analizar."
+    
+    prompt = f"""
+Eres analista de medios. Resume estas noticias en un contexto general coherente.
+
+Noticias:
+{chr(10).join([t["titular"] for t in titulares_importantes])}
+
+Genera un resumen ejecutivo que:
+1. Identifique el tema central.
+2. Mencione las noticias clave.
+3. Destaque coincidencias o contradicciones entre fuentes.
+"""
+    url = "https://api.deepseek.com/v1/chat/completions"
+    headers = {"Authorization": f"Bearer {DEEPSEEK_KEY}", "Content-Type": "application/json"}
+    payload = {"model": "deepseek-chat", "messages": [{"role": "user", "content": prompt}], "temperature": 0.3, "max_tokens": 500}
+    try:
+        response = requests.post(url, headers=headers, json=payload)
+        if response.status_code == 200:
+            return response.json()["choices"][0]["message"]["content"]
+        return f"❌ Error: HTTP {response.status_code}"
+    except Exception as e:
+        return f"❌ Error: {str(e)}"
+
+# ====================================================
+# INTERFAZ GRÁFICA
+# ====================================================
+
+class AnalizadorGUI:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Analizador de Noticias · Lux Vinculum")
+        self.root.geometry("1200x800")
+        self.root.configure(bg="#0a0a12")
+        self.texto = ""
+        self.resultados = []
+        self.crear_widgets()
+    
+    def crear_widgets(self):
+        titulo = tk.Label(self.root, text="📰 Analizador de Noticias · Lux Vinculum",
+                         font=("Arial", 18, "bold"), fg="#C9A84C", bg="#0a0a12")
+        titulo.pack(pady=10)
+        
+        btn_frame = tk.Frame(self.root, bg="#0a0a12")
+        btn_frame.pack(pady=10)
+        
+        tk.Button(btn_frame, text="📄 Cargar PDF (OCR)", command=self.cargar_pdf,
+                  bg="#C9A84C", fg="#0a0a12", font=("Arial", 10, "bold"), padx=15, pady=5).pack(side=tk.LEFT, padx=5)
+        
+        tk.Button(btn_frame, text="📂 Cargar TXT", command=self.cargar_txt,
+                  bg="#2a7a5a", fg="white", font=("Arial", 10, "bold"), padx=15, pady=5).pack(side=tk.LEFT, padx=5)
+        
+        tk.Button(btn_frame, text="🔍 Analizar", command=self.analizar,
+                  bg="#C9A84C", fg="#0a0a12", font=("Arial", 10, "bold"), padx=15, pady=5).pack(side=tk.LEFT, padx=5)
+        
+        tk.Button(btn_frame, text="💾 Guardar Reporte", command=self.guardar_reporte,
+                  bg="#2a7a5a", fg="white", font=("Arial", 10, "bold"), padx=15, pady=5).pack(side=tk.LEFT, padx=5)
+        
+        self.estado_label = tk.Label(self.root, text="✅ Listo", fg="#2ecc71", bg="#0a0a12", font=("Arial", 10))
+        self.estado_label.pack(pady=5)
+        
+        # Panel dividido
+        paned = tk.PanedWindow(self.root, orient=tk.HORIZONTAL, bg="#0a0a12")
+        paned.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        
+        # Previsualización
+        left_frame = tk.Frame(paned, bg="#1a1a2e")
+        paned.add(left_frame, width=400)
+        tk.Label(left_frame, text="📄 Previsualización", fg="#C9A84C", bg="#1a1a2e").pack(pady=5)
+        self.texto_preview = scrolledtext.ScrolledText(left_frame, height=30, bg="#1a1a2e", fg="#e0e0e0",
+                                                       font=("Courier", 9))
+        self.texto_preview.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        
+        # Resultados
+        right_frame = tk.Frame(paned, bg="#1a1a2e")
+        paned.add(right_frame, width=700)
+        tk.Label(right_frame, text="📊 Resultados", fg="#C9A84C", bg="#1a1a2e").pack(pady=5)
+        self.resultados_texto = scrolledtext.ScrolledText(right_frame, height=30, bg="#1a1a2e", fg="#e0e0e0",
+                                                          font=("Courier", 9))
+        self.resultados_texto.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+    
+    def cargar_pdf(self):
+        archivo = filedialog.askopenfilename(filetypes=[("Archivos PDF", "*.pdf")])
+        if not archivo:
+            return
+        
+        self.estado_label.config(text="⏳ Procesando PDF con OCR...", fg="#f39c12")
+        self.root.update()
+        
+        # Ejecutar OCR en un hilo separado para no bloquear la interfaz
+        def procesar_ocr():
+            texto, error = extraer_texto_desde_pdf(archivo)
+            if error:
+                self.root.after(0, lambda: self.mostrar_error_ocr(error))
+                return
+            
+            self.texto = texto
+            self.root.after(0, lambda: self.mostrar_texto(texto, archivo))
+        
+        threading.Thread(target=procesar_ocr, daemon=True).start()
+    
+    def mostrar_error_ocr(self, error):
+        messagebox.showerror("Error OCR", error)
+        self.estado_label.config(text="❌ Error en OCR", fg="#e74c3c")
+    
+    def mostrar_texto(self, texto, archivo):
+        self.texto_preview.delete(1.0, tk.END)
+        self.texto_preview.insert(tk.END, texto[:2000] + ("\n\n..." if len(texto) > 2000 else ""))
+        self.estado_label.config(text=f"✅ PDF procesado: {os.path.basename(archivo)}", fg="#2ecc71")
+    
+    def cargar_txt(self):
+        archivo = filedialog.askopenfilename(filetypes=[("Archivos de texto", "*.txt")])
+        if archivo:
+            with open(archivo, 'r', encoding='utf-8') as f:
+                self.texto = f.read()
+            self.texto_preview.delete(1.0, tk.END)
+            self.texto_preview.insert(tk.END, self.texto[:2000] + ("\n\n..." if len(self.texto) > 2000 else ""))
+            self.estado_label.config(text=f"✅ TXT cargado: {os.path.basename(archivo)}", fg="#2ecc71")
+    
+    def analizar(self):
+        if not self.texto:
+            messagebox.showwarning("Sin texto", "Carga un PDF o TXT primero.")
+            return
+        
+        self.estado_label.config(text="⏳ Analizando...", fg="#f39c12")
+        self.root.update()
+        
+        try:
+            titulares = extraer_titulares(self.texto)
+            self.resultados = []
+            for t in titulares:
+                analisis = analizar_titular(t)
+                if not analisis["error"]:
+                    self.resultados.append(analisis)
+            
+            importantes = sorted([r for r in self.resultados if "ALTO" in r["nivel"] or "MEDIO" in r["nivel"]],
+                               key=lambda x: x["eco"], reverse=True)[:6]
+            sin_eco = [r for r in self.resultados if r["eco"] <= 1]
+            contexto = generar_contexto(importantes)
+            
+            self.mostrar_resultados(importantes, sin_eco, contexto)
+            self.estado_label.config(text=f"✅ Análisis completado ({len(importantes)} importantes, {len(sin_eco)} sin eco)", fg="#2ecc71")
+        except Exception as e:
+            messagebox.showerror("Error", str(e))
+            self.estado_label.config(text="❌ Error", fg="#e74c3c")
+    
+    def mostrar_resultados(self, importantes, sin_eco, contexto):
+        self.resultados_texto.delete(1.0, tk.END)
+        
+        self.resultados_texto.insert(tk.END, "📊 NOTICIAS MÁS IMPORTANTES\n", "titulo")
+        self.resultados_texto.insert(tk.END, "═" * 70 + "\n\n", "separador")
+        
+        self.resultados_texto.insert(tk.END, "📌 CONTEXTO GENERAL:\n", "subtitulo")
+        self.resultados_texto.insert(tk.END, contexto + "\n\n", "texto")
+        self.resultados_texto.insert(tk.END, "═" * 70 + "\n\n", "separador")
+        
+        self.resultados_texto.insert(tk.END, f"📋 NOTICIAS DESTACADAS (Top {len(importantes)}):\n\n", "subtitulo")
+        for i, n in enumerate(importantes, 1):
+            self.resultados_texto.insert(tk.END, f"{i}. [{n['nivel']}] {n['titular']}\n", "noticia")
+            self.resultados_texto.insert(tk.END, f"   Eco: {n['eco']} resultados\n", "detalle")
+            for f in n["fuentes"][:3]:
+                self.resultados_texto.insert(tk.END, f"     → {f['titulo']}\n", "fuente")
+                self.resultados_texto.insert(tk.END, f"       {f['link']}\n", "link")
+            self.resultados_texto.insert(tk.END, "\n", "texto")
+        
+        if sin_eco:
+            self.resultados_texto.insert(tk.END, "═" * 70 + "\n\n", "separador")
+            self.resultados_texto.insert(tk.END, "🔇 NOTICIAS SIN ECO\n", "subtitulo")
+            for n in sin_eco[:5]:
+                self.resultados_texto.insert(tk.END, f"• {n['titular']}\n", "sin_eco")
+                self.resultados_texto.insert(tk.END, f"   Eco: {n['eco']} resultados\n", "detalle")
+        
+        self.resultados_texto.tag_config("titulo", foreground="#C9A84C", font=("Arial", 14, "bold"))
+        self.resultados_texto.tag_config("subtitulo", foreground="#2a7a5a", font=("Arial", 12, "bold"))
+        self.resultados_texto.tag_config("noticia", foreground="#e0e0e0", font=("Arial", 11, "bold"))
+        self.resultados_texto.tag_config("detalle", foreground="#aaaaaa", font=("Arial", 9))
+        self.resultados_texto.tag_config("fuente", foreground="#cccccc", font=("Arial", 9))
+        self.resultados_texto.tag_config("link", foreground="#666666", font=("Arial", 8))
+        self.resultados_texto.tag_config("texto", foreground="#e0e0e0", font=("Arial", 10))
+        self.resultados_texto.tag_config("separador", foreground="#444444", font=("Arial", 8))
+        self.resultados_texto.tag_config("sin_eco", foreground="#e74c3c", font=("Arial", 10))
+    
+    def guardar_reporte(self):
+        if not self.resultados:
+            messagebox.showwarning("Sin resultados", "Primero ejecuta un análisis.")
+            return
+        fecha = datetime.now().strftime("%Y%m%d_%H%M%S")
+        path = f"C:/Users/roble/Desktop/reporte_{fecha}.txt"
+        with open(path, 'w', encoding='utf-8') as f:
+            f.write(self.resultados_texto.get(1.0, tk.END))
+        messagebox.showinfo("Guardado", f"✅ Reporte guardado en:\n{path}")
+
+# ====================================================
+# MAIN
+# ====================================================
+
+if __name__ == "__main__":
+    print("🚀 Iniciando Analizador de Noticias...")
+    root = tk.Tk()
+    app = AnalizadorGUI(root)
+    root.mainloop()
+
+

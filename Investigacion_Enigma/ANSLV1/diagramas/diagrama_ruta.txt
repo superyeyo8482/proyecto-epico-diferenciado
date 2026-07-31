@@ -1,0 +1,45 @@
+﻿═══════════════════════════════════════
+📊 DIAGRAMA DE RUTA · ANSLV1
+═══════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────┐
+│                         🧠 ANSLV1                                 │
+│                   (Agente Autónomo Soberano)                       │
+└─────────────────────────────────────────────────────────────────────┘
+                              │
+              ┌───────────────┼───────────────┐
+              │               │               │
+              ▼               ▼               ▼
+┌─────────────────┐ ┌─────────────────┐ ┌─────────────────────────┐
+│   ☁️ CLOUDFLARE  │ │   🐙 GITHUB     │ │   🔗 INTEGRACIONES     │
+│   (El Cuerpo)   │ │   (La Memoria)  │ │   (Los Sentidos)        │
+└─────────────────┘ └─────────────────┘ └─────────────────────────┘
+        │                   │                       │
+        ▼                   ▼                       ▼
+┌─────────────────────────────────────────────────────────────────┐
+│  │  Workers        │  │  Repositorio    │  │  Label Software  │
+│  │  AI Gateway     │  │  GitHub Actions │  │  Quantum Forma   │
+│  │  Durable Objects│  │  Copilot        │  │  Enigmas         │
+│  │  MCP Server     │  │  MCP Server     │  │  MCP Tools       │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+              ┌─────────────────────────────┐
+              │    🧠 ANSLV1 (Núcleo)        │
+              │  - Personalidad              │
+              │  - Memoria a largo plazo     │
+              │  - Autonomía                 │
+              │  - Seguridad                 │
+              └─────────────────────────────┘
+                              │
+                              ▼
+              ┌─────────────────────────────┐
+              │   🌌 LUX VINCULUM            │
+              │   (El Ecosistema Soberano)   │
+              └─────────────────────────────┘
+
+═══════════════════════════════════════
+📌 FLUJO DE TRABAJO SUGERIDO:
+1. Desplegar Workers en Cloudflare → 2. Subir código a GitHub → 3. Conectar MCP → 4. Integrar con Lux Vinculum → 5. Iterar.
+
+═══════════════════════════════════════

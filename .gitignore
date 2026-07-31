@@ -1,0 +1,23 @@
+﻿# Credenciales
+credenciales.env
+*.key
+*.pem
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+*.log
+
+# Sistema
+.DS_Store
+Thumbs.db
+*.tmp
+
+# Configuración local
+etiquetadora_config.json
+license.key

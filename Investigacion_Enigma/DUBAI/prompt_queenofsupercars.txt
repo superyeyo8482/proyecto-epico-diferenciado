@@ -1,0 +1,10 @@
+﻿Investiga el perfil 'queenofsupercars' en TikTok y redes asociadas.
+Genera un perfil de esencia basado en el nombre, el contexto de supercars y lujo, y cualquier mención pública disponible.
+
+Incluye:
+- Tipo de perfil (real/artificial)
+- Posible ubicación geográfica
+- Temas dominantes
+- Nivel de confianza
+
+Usa fuentes abiertas y no dejes rastro.

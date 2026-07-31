@@ -1,0 +1,22 @@
+﻿graph TD
+    A[Video de 20 min] --> B[Extraer audio]
+    A --> C[Extraer frames cada 2 segundos]
+    
+    B --> D[Whisper: Transcripción + timestamps]
+    C --> E[YOLO: Detectar dedos y descartar frames]
+    E --> F[Frames limpios sin dedos]
+    
+    D --> G[Texto con timestamps: anillo, precio, codigo]
+    F --> H[Recortar joyas de frames limpios]
+    
+    G --> I[DeepSeek: Cruzar texto y frames]
+    H --> I
+    
+    I --> J[CSV: ID, descripcion, precio, imagen recortada]
+    
+    K[Imagen de broqueles] --> L[Segmentacion por contornos]
+    L --> M[Recortar cada broquel]
+    M --> N[OCR: Extraer precios]
+    
+    N --> J
+    J --> O[Label Software: Imprimir etiquetas]
