@@ -9,7 +9,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackQueryHandler, ContextTypes
 from telegram.error import NetworkError, TimedOut
 import torch
-import openai_clip as clip
+import clip
 from PIL import Image, ImageEnhance, ImageFilter
 import pytesseract
 import pymupdf as fitz
@@ -94,6 +94,7 @@ app.add_handler(MessageHandler(filters.PHOTO, guardar_imagen))
 
 print("🧡 ANSLV1 iniciado.")
 app.run_polling()
+
 
 
 
