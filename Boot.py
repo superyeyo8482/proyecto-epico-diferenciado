@@ -12,7 +12,7 @@ import torch
 import clip
 from PIL import Image, ImageEnhance, ImageFilter
 import pytesseract
-import fitz
+import pymupdf as fitz
 
 TELEGRAM_TOKEN = "8924820055:AAE73Jub2MhK1L-5JM_aHSsT2YlX68eX3kc"
 DEEPSEEK_API_KEY = "sk-6036f527b5ff4906ae18bbfebabeb1f1"
@@ -94,4 +94,5 @@ app.add_handler(MessageHandler(filters.PHOTO, guardar_imagen))
 
 print("🧡 ANSLV1 iniciado.")
 app.run_polling()
+
 
