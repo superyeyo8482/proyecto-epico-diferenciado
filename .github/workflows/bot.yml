@@ -16,7 +16,7 @@ jobs:
         with:
           python-version: '3.14'
       - run: pip install -r requirements.txt || true
-      - run: pip install requests python-telegram-bot pytesseract pillow torch clip fitz
+      - run: pip install requests python-telegram-bot pytesseract pillow torch clip pymupdf
       - run: python Boot.py
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
@@ -30,3 +30,4 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLAVE_MAESTRA: ${{ secrets.CLAVE_MAESTRA }}
+
