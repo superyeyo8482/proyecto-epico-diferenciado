@@ -1,0 +1,26 @@
+﻿🗺️ DIAGRAMA DE EVOLUCIÓN · ANSLV1 ↔ BOT ↔ QUANTUM FORMA
+
+FASE 1: Núcleo Base (✅)
+   Bot → ANSLV1 → DeepSeek + Serper
+
+FASE 2: Solicitud de Credenciales (⏳)
+   Bot → ¿Necesita clave? → Quantum Forma → devuelve clave
+
+FASE 3: Expansión de Funciones (⏳)
+   Bot → Facturas, tickets, documentos, reportes
+
+FASE 4: Integración con Ecosistema (⏳)
+   Bot → Analizador, Radar, Image TempCoin, QF
+
+FASE 5: Autonomía (⏳)
+   Bot → tareas programadas, alertas, decisiones con supervisión
+
+FASE 6: Adquisición de Módulos (⏳)
+   Bot → Nuevos módulos bajo demanda
+   Bot → Integración con herramientas externas
+   Bot → Expansión según necesidades del ecosistema
+
+📌 NOTA:
+   - ANSLV1 y el Bot son el mismo agente.
+   - El crecimiento es modular y bajo demanda.
+   - Quantum Forma actúa como gestor de credenciales y recursos.
