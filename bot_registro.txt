@@ -1,0 +1,32 @@
+﻿═══════════════════════════════════════════════════════════════
+🤖 ANSLV1 BOT · REGISTRO DE FUNCIONES (ACTUALIZADO)
+📅 06/08/2026 01:12
+═══════════════════════════════════════════════════════════════
+
+📌 FUNCIONES ACTUALES:
+   - /start: Inicia el bot
+   - /semana: Muestra la agenda semanal
+   - /ticket: Procesa tickets (en desarrollo)
+   - Mensajes de voz: Transcripción con DeepSeek
+   - Imágenes: Guardado y procesamiento
+
+📌 FUNCIONES POR DESARROLLAR:
+   - Procesamiento de facturas
+   - Organización de tickets
+   - Conexión con Quantum Forma GUI
+   - Lectura de documentos escaneados
+
+📌 ARCHIVOS CLAVE EN EL REPOSITORIO:
+   - Boot.py → Bot principal (Telegram)
+   - ANSLV1.py → Memoria fundacional incrustada
+   - ventana_deepseek.py → Interfaz gráfica (Quantum Forma)
+
+📌 UBICACIÓN DE LOS ARCHIVOS:
+   - Boot.py: C:\Users\roble\OneDrive\Documentos\proyecto epico diferenciado\LuxVinculum\Boot.py
+   - ANSLV1.py: C:\Users\roble\OneDrive\Documentos\proyecto epico diferenciado\LuxVinculum\ANSLV1.py
+   - ventana_deepseek.py: C:\Users\roble\OneDrive\Documentos\proyecto epico diferenciado\LuxVinculum\ventana_deepseek.py
+
+📌 NOTA:
+   - El bot está diseñado para ejecutarse en GitHub Actions.
+   - Las credenciales deben estar en GitHub Secrets.
+   - Los archivos ANSLV1.py y ventana_deepseek.py ya están integrados.
