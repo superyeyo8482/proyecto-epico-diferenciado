@@ -1,4 +1,14 @@
-﻿import requests
+﻿
+# ======================================================
+# 📨 MENSAJE PARA CUANDO YEYO NO ESTÁ
+# ======================================================
+
+MENSAJE_AUSENCIA = """
+Yeyo no está en este momento. Estoy yo, su amigo de ceros y unos.
+Puedo ayudarte casi como él lo haría. De cualquier forma, pasaré tu recado.
+No me dijo cuándo vuelve.
+"""
+import requests
 import os
 import asyncio
 import csv
@@ -94,6 +104,7 @@ app.add_handler(MessageHandler(filters.PHOTO, guardar_imagen))
 
 print("🧡 ANSLV1 iniciado.")
 app.run_polling()
+
 
 
 
