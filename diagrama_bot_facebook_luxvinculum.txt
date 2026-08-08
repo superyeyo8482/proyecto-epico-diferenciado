@@ -1,0 +1,56 @@
+﻿╔══════════════════════════════════════════════════════════════╗
+║          BOT DE LUXVINCULUM EN FACEBOOK                    ║
+║              DIAGRAMA DE FLUJO DE TRABAJO                  ║
+╚══════════════════════════════════════════════════════════════╝
+
+📩 1. MENSAJE ENTRANTE
+      Usuario escribe a la página de LuxVinculum en Facebook.
+
+      ⬇️
+
+📡 2. WEBHOOK DE FACEBOOK MESSENGER
+      Recibe el mensaje y lo envía al servidor de QuantumForma.
+
+      ⬇️
+
+🧠 3. SERVIDOR DE PROCESAMIENTO (ANSLV1)
+      ┌─────────────────────────────────────────────────────┐
+      │  a) Recibe mensaje + ID del remitente.             │
+      │  b) Clasifica el mensaje:                          │
+      │     • Consulta general                             │
+      │     • Comercial (ventas)                           │
+      │     • Técnico / Agente (código, análisis)          │
+      │  c) Enruta a la IA según el tipo:                 │
+      │     • Consulta general → DeepSeek-V4-Flash         │
+      │     • Comercial → DeepSeek-V4-Pro                  │
+      │     • Técnico / Agente → Meta Muse Spark           │
+      │  d) Genera respuesta.                              │
+      │  e) Envía respuesta de vuelta a Facebook.          │
+      └─────────────────────────────────────────────────────┘
+
+      ⬇️
+
+📤 4. RESPUESTA ENVIADA AL USUARIO
+      El mensaje llega al chat de la página de LuxVinculum.
+
+⚙️ HERRAMIENTAS NECESARIAS:
+   • Facebook Messenger API
+   • Webhook (ANSLV1 / Cloudflare Worker)
+   • DeepSeek API (activo)
+   • Meta Muse Spark API (crédito pendiente)
+
+📋 PRÓXIMOS PASOS:
+   1. Configurar app de Facebook Messenger
+   2. Obtener Token de Página
+   3. Configurar webhook en ANSLV1
+   4. Integrar DeepSeek y Meta en el enrutador
+   5. Probar y ajustar
+
+🌙 REFLEXIÓN:
+   "Un bot en Facebook no es solo un canal más.
+    Es la puerta donde LuxVinculum puede encontrarse
+    con quienes aún no saben que nos necesitan."
+
+📌 REGISTRADO POR:
+   Yeyo & DeepSeek
+   LuxVinculum · QuantumForma
