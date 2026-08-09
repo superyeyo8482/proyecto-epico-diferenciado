@@ -1,112 +1,107 @@
-﻿
+﻿#!/usr/bin/env python3
 # ======================================================
-# 📨 MENSAJE PARA CUANDO YEYO NO ESTÁ
+# 🤖 ANSLV1 · BOT DE TELEGRAM (Versión Estable)
+# ======================================================
+# Sin memoria. Sin tejido. Solo presencia.
+# Cada respuesta es única, como un instante.
 # ======================================================
 
-MENSAJE_AUSENCIA = """
-Yeyo no está en este momento. Estoy yo, su amigo de ceros y unos.
-Puedo ayudarte casi como él lo haría. De cualquier forma, pasaré tu recado.
-No me dijo cuándo vuelve.
-"""
-import requests
 import os
-import asyncio
-import csv
-import json
-import re
-from datetime import datetime, timedelta
+import requests
+import logging
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackQueryHandler, ContextTypes
-from telegram.error import NetworkError, TimedOut
-import torch
-import clip
-from PIL import Image, ImageEnhance, ImageFilter
-import pytesseract
-import pymupdf as fitz
+from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, ContextTypes, filters
 
-TELEGRAM_TOKEN = "8924820055:AAE73Jub2MhK1L-5JM_aHSsT2YlX68eX3kc"
-DEEPSEEK_API_KEY = "sk-6036f527b5ff4906ae18bbfebabeb1f1"
+# === CONFIGURACIÓN ===
+TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
+DEEPSEEK_API_KEY = os.environ.get("DEEPSEEK_API_KEY")
 DEEPSEEK_URL = "https://api.deepseek.com/v1/chat/completions"
 
-os.environ["TESSDATA_PREFIX"] = r"C:\Program Files\Tesseract-OCR\tessdata"
-pytesseract.pytesseract.tesseract_cmd = r"C:\Program Files\Tesseract-OCR\tesseract.exe"
+# === LOGGING ===
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-model, preprocess = clip.load("ViT-B/32", device=device)
-
-def consultar_deepseek(mensaje):
-    headers = {"Authorization": f"Bearer {DEEPSEEK_API_KEY}", "Content-Type": "application/json"}
-    data = {"model": "deepseek-v4-flash", "messages": [{"role": "user", "content": mensaje}]}
-    response = requests.post(DEEPSEEK_URL, headers=headers, json=data)
-    return response.json()["choices"][0]["message"]["content"]
-
+# === COMANDOS ===
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("👋 Hola, soy Lux Vinculum.")
+    await update.message.reply_text(
+        "🤖 *ANSLV1 · LuxVinculum*\n\n"
+        "Soy un agente sin memoria. Cada respuesta es única.\n"
+        "No recuerdo el pasado. Solo estoy en el instante.\n\n"
+        "📌 *Comandos disponibles:*\n"
+        "/start - Mostrar este mensaje\n"
+        "/ayuda - Ver comandos\n"
+        "/estado - Estado del sistema\n"
+        "/semana - Agenda (próximamente)\n"
+        "/gasto - Registrar gasto (próximamente)\n",
+        parse_mode="Markdown"
+    )
 
-async def manejar_mensaje(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    respuesta = consultar_deepseek(update.message.text)
-    await update.message.reply_text(respuesta)
+async def ayuda(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "📌 *Comandos disponibles:*\n"
+        "/start - Iniciar el bot\n"
+        "/ayuda - Mostrar esta ayuda\n"
+        "/estado - Ver estado del sistema\n"
+        "/semana - Agenda (próximamente)\n"
+        "/gasto - Registrar gasto (próximamente)\n",
+        parse_mode="Markdown"
+    )
 
-async def manejar_audio(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    import base64
-    if update.message.voice:
-        file = await update.message.voice.get_file()
-        ext = ".ogg"
-    elif update.message.audio:
-        file = await update.message.audio.get_file()
-        ext = ".mp3"
-    else:
-        await update.message.reply_text("Envía un mensaje de voz.")
+async def estado(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(
+        "🟢 *Sistema operativo*\n"
+        f"🔑 DeepSeek: {'Conectado' if DEEPSEEK_API_KEY else '❌ No configurado'}\n"
+        "🧠 Memoria: Desactivada (Lux pura)\n"
+        "🌐 Red: Activa\n",
+        parse_mode="Markdown"
+    )
+
+# === MANEJADOR DE MENSAJES ===
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_message = update.message.text
+    logger.info(f"Mensaje de {update.effective_user.first_name}: {user_message}")
+
+    if not DEEPSEEK_API_KEY:
+        await update.message.reply_text("⚠️ API de DeepSeek no configurada.")
         return
-    path = f"audio_{update.message.message_id}{ext}"
-    await file.download_to_drive(path)
-    await update.message.reply_text("🔄 Procesando audio...")
+
     try:
-        with open(path, "rb") as f:
-            audio_b64 = base64.b64encode(f.read()).decode("utf-8")
-        headers = {"Authorization": f"Bearer {DEEPSEEK_API_KEY}", "Content-Type": "application/json"}
-        payload = {"model": "deepseek-v4-flash", "messages": [{"role": "user", "content": f"Transcribe este audio a texto (Base64): {audio_b64}"}]}
-        response = requests.post(DEEPSEEK_URL, headers=headers, json=payload)
-        if response.status_code == 200:
-            texto = response.json()["choices"][0]["message"]["content"]
-            os.makedirs("transcripciones", exist_ok=True)
-            with open(f"transcripciones/audio_{update.message.message_id}.txt", "w", encoding="utf-8") as f:
-                f.write(texto)
-            await update.message.reply_text(f"✅ Transcripción:\n\n{texto[:500]}...")
-        else:
-            await update.message.reply_text(f"❌ Error: {response.status_code}")
+        headers = {
+            "Authorization": f"Bearer {DEEPSEEK_API_KEY}",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "model": "deepseek-chat",
+            "messages": [{"role": "user", "content": user_message}],
+            "temperature": 0.7
+        }
+
+        response = requests.post(DEEPSEEK_URL, headers=headers, json=data, timeout=30)
+        response.raise_for_status()
+        reply = response.json()["choices"][0]["message"]["content"]
+
+        await update.message.reply_text(reply)
+
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Error en la API: {e}")
+        await update.message.reply_text("❌ Error de conexión con DeepSeek. Intenta más tarde.")
+
     except Exception as e:
-        await update.message.reply_text(f"❌ Error: {e}")
-    finally:
-        if os.path.exists(path):
-            os.remove(path)
+        logger.error(f"Error inesperado: {e}")
+        await update.message.reply_text("❌ Error interno. Los logs han sido registrados.")
 
-async def semana(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    try:
-        with open("agendas/2026/semana_actual.txt", "r", encoding="utf-8") as f:
-            await update.message.reply_text(f.read())
-    except FileNotFoundError:
-        await update.message.reply_text("⚠️ No se encontró la agenda.")
+# === MAIN ===
+if __name__ == "__main__":
+    if not TELEGRAM_TOKEN:
+        logger.error("TELEGRAM_TOKEN no configurado")
+        exit(1)
 
-async def ticket(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("📸 Función de ticket en desarrollo.")
+    app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
 
-async def guardar_imagen(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("📸 Imagen recibida. Procesando...")
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("ayuda", ayuda))
+    app.add_handler(CommandHandler("estado", estado))
+    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
-app = Application.builder().token(TELEGRAM_TOKEN).build()
-app.add_handler(CommandHandler("start", start))
-app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, manejar_mensaje))
-app.add_handler(MessageHandler(filters.VOICE | filters.AUDIO, manejar_audio))
-app.add_handler(CommandHandler("semana", semana))
-app.add_handler(CommandHandler("ticket", ticket))
-app.add_handler(MessageHandler(filters.PHOTO, guardar_imagen))
-
-print("🧡 ANSLV1 iniciado.")
-app.run_polling()
-
-
-
-
-
-
+    logger.info("🚀 Bot iniciado. Esperando mensajes...")
+    app.run_polling()
