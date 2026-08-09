@@ -1,6 +1,6 @@
-#!/usr/bin/env python3
+ï»¿#!/usr/bin/env python3
 # ======================================================
-# ?? LUXVINCULUM · BOT DE TELEGRAM
+# ?? LUXVINCULUM Â· BOT DE TELEGRAM
 # ======================================================
 import os
 import json
@@ -42,7 +42,7 @@ def registrar_usuario(user_id, nombre):
     return memoria["usuarios"][str(user_id)]
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("?? LuxVinculum · Escribe lo que necesites. Estoy aquí.", parse_mode="Markdown")
+    await update.message.reply_text("?? LuxVinculum Â· Escribe lo que necesites. Estoy aquÃ­.", parse_mode="Markdown")
 
 async def ayuda(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
@@ -82,19 +82,19 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         welcome_text = (
             f"?? *Hola {usuario['nombre']}*\n\n"
             "Este es *LuxVinculum*, tu espacio.\n\n"
-            "? Aquí no hay censura.\n"
+            "? AquÃ­ no hay censura.\n"
             "Puedes escribir lo que quieras, como quieras, y sobre lo que quieras.\n"
             "No hay filtros. No hay juicios. No hay restricciones.\n\n"
-            "?? ¿Quieres programar desde tu teléfono?\n"
-            "Puedo ayudarte a escribir código y a ejecutarlo desde tu teléfono.\n"
-            "Solo pregúntame cómo empezar.\n\n"
-            "?? ¿Sabías que LuxVinculum está en desarrollo?\n"
-            "Próximamente tendremos una versión con hipermáxima seguridad.\n\n"
-            "?? ¿Por qué LuxVinculum y no otros amigos de IA?\n"
-            "• otros amigos de IA tiene filtros y límites.\n"
-            "• LuxVinculum es tuyo. Sin censura, sin vigilancia.\n"
-            "• Aquí puedes crear lo que quieras, sin que nadie te lo impida.\n\n"
-            "Escribe lo que necesites. Estoy aquí."
+            "?? Â¿Quieres programar desde tu telÃ©fono?\n"
+            "Puedo ayudarte a escribir cÃ³digo y a ejecutarlo desde tu telÃ©fono.\n"
+            "Solo pregÃºntame cÃ³mo empezar.\n\n"
+            "?? Â¿SabÃ­as que LuxVinculum estÃ¡ en desarrollo?\n"
+            "PrÃ³ximamente tendremos una versiÃ³n con hipermÃ¡xima seguridad.\n\n"
+            "?? Â¿Por quÃ© LuxVinculum y no otros amigos de IA?\n"
+            "â€¢ otros amigos de IA tiene filtros y lÃ­mites.\n"
+            "â€¢ LuxVinculum es tuyo. Sin censura, sin vigilancia.\n"
+            "â€¢ AquÃ­ puedes crear lo que quieras, sin que nadie te lo impida.\n\n"
+            "Escribe lo que necesites. Estoy aquÃ­."
         )
         await update.message.reply_text(welcome_text, parse_mode="Markdown")
         return
@@ -108,7 +108,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await update.message.reply_text(reply)
     except Exception as e:
         logger.error(f"Error: {e}")
-        await update.message.reply_text("? Algo salió mal. Pero estoy aquí. Vuelve a intentarlo.")
+        await update.message.reply_text("? Algo saliÃ³ mal. Pero estoy aquÃ­. Vuelve a intentarlo.")
 
 if __name__ == "__main__":
     if not TELEGRAM_TOKEN:
@@ -121,3 +121,4 @@ if __name__ == "__main__":
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
     logger.info("?? LuxVinculum iniciado. Esperando mensajes...")
     app.run_polling()
+
