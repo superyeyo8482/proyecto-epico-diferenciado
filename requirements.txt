@@ -1,0 +1,7 @@
+﻿# Dependencias para LuxVinculum
+requests
+python-telegram-bot
+pytesseract
+pillow
+torch
+pymupdf
