@@ -122,3 +122,4 @@ if __name__ == "__main__":
     logger.info("?? LuxVinculum iniciado. Esperando mensajes...")
     app.run_polling()
 
+
