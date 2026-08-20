@@ -1,0 +1,30 @@
+﻿═══════════════════════════════════════════════════════════════
+🤖 DEEPSEEK HARNESS · REGISTRO DE AVANCE
+📅 20/08/2026 00:43
+═══════════════════════════════════════════════════════════════
+
+🧠 INTENTO:
+   - Ejecutar 
+px @deepseek-ai/dsh web localmente.
+   - Error: JavaScript heap out of memory (RAM insuficiente).
+
+🔍 DIAGNÓSTICO:
+   - El equipo (Acer Suspiro 60L) no tiene suficiente RAM.
+   - El comando requiere más memoria de la disponible.
+
+🛠️ SOLUCIÓN:
+   - Usar GitHub Codespaces para ejecutar el comando en la nube.
+   - Entorno con más RAM y recursos.
+
+📌 PRÓXIMOS PASOS:
+   1. Crear Codespace en GitHub.
+   2. Ejecutar 
+px @deepseek-ai/dsh web en la terminal.
+   3. Probar la interfaz de DeepSeek Harness.
+
+🌙 REFLEXIÓN:
+   "El error no es un muro. Es una señal de que el camino está en la nube."
+
+📌 REGISTRADO POR:
+   Yeyo & DeepSeek
+   LuxVinculum

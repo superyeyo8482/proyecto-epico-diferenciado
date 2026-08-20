@@ -5,3 +5,7 @@ pytesseract
 pillow
 torch
 pymupdf
+
+clip
+
+flask

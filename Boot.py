@@ -238,5 +238,27 @@ def main():
     logger.info(f"🚀 Quantum Forma Bot iniciado. (max_tokens={MAX_TOKENS}, temperature={TEMPERATURE})")
     app.run_polling()
 
-if __name__ == "__main__":
+
+# ======================================================
+# 🌐 ENDPOINT DE SALUD PARA RENDER
+# ======================================================
+
+app = Flask(__name__)
+
+@app.route('/health')
+def health():
+    return jsonify({
+        "status": "ok",
+        "timestamp": time.time(),
+        "bot": "Quantum Forma"
+    })
+
+def run_flask():
+    app.run(host='0.0.0.0', port=8080)
+
+# Iniciar Flask en un hilo separado
+threading.Thread(target=run_flask, daemon=True).start()
+
+
     main()
+
