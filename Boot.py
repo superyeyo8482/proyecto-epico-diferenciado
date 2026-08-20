@@ -258,7 +258,6 @@ def run_flask():
 
 # Iniciar Flask en un hilo separado
 threading.Thread(target=run_flask, daemon=True).start()
+main()
 
-
-    main()
 
