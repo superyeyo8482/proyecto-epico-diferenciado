@@ -1,0 +1,34 @@
+name: Bot Híbrido (Respaldo)
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'  # Cada 10 minutos
+  workflow_dispatch:
+
+jobs:
+  check-and-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+
+      - name: Leer estado del bot local
+        id: check_local
+        run: |
+          if [ -f "bot_status.json" ]; then
+            ACTIVE=$(jq -r '.status' bot_status.json)
+          else
+            ACTIVE="inactive"
+          fi
+          echo "active=$ACTIVE" >> $GITHUB_OUTPUT
+
+      - name: Si el bot local NO está activo, ejecutar en la nube
+        if: steps.check_local.outputs.active != 'active'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - run: pip install -r requirements.txt || true
+      - run: python Boot.py
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
