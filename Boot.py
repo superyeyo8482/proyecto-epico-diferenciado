@@ -261,3 +261,27 @@ threading.Thread(target=run_flask, daemon=True).start()
 main()
 
 
+
+def enviar_alerta_telegram(mensaje):
+    \"\"\"Envía una alerta por Telegram\"\"\"
+    import requests
+    import os
+    token = os.getenv("TELEGRAM_TOKEN")
+    chat_id = os.getenv("TELEGRAM_CHAT_ID")
+    if not token or not chat_id:
+        print("⚠️ Telegram no configurado")
+        return
+    try:
+        url = f"https://api.telegram.org/bot{token}/sendMessage"
+        data = {
+            "chat_id": chat_id,
+            "text": mensaje,
+            "parse_mode": "Markdown"
+        }
+        response = requests.post(url, json=data, timeout=5)
+        if response.status_code == 200:
+            print("✅ Alerta enviada a Telegram")
+        else:
+            print(f"❌ Error al enviar alerta: {response.status_code}")
+    except Exception as e:
+        print(f"❌ Error: {e}")
