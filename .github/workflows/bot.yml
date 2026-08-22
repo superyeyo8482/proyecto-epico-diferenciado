@@ -1,35 +1,40 @@
-﻿name: ANSLV1 Bot
+name: ANSLV1 Bot
 
 on:
-  workflow_dispatch:
-  push:
-    branches: [ main ]
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 */6 * * *'  # Cada 6 horas
+  workflow_dispatch:
 
 jobs:
   run-bot:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout código
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
         with:
-          python-version: '3.14'
-      - run: pip install -r requirements.txt || true
-      - run: pip install requests python-telegram-bot pytesseract pillow torch pymupdf && pip install git+https://github.com/openai/CLIP.git
-      - run: python Boot.py
+          python-version: '3.10'
+
+      - name: Instalar dependencias
+        run: |
+          pip install -r requirements.txt
+
+      - name: Ejecutar Boot.py con variables de entorno
+        id: bot
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
-          TWILIO_ACCOUNT_SID: ${{ secrets.TWILIO_ACCOUNT_SID }}
-          TWILIO_AUTH_TOKEN: ${{ secrets.TWILIO_AUTH_TOKEN }}
-          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-          GOOGLE_CSE_ID: ${{ secrets.GOOGLE_CSE_ID }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLAVE_MAESTRA: ${{ secrets.CLAVE_MAESTRA }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python Boot.py
+        continue-on-error: true
 
+      - name: Enviar alerta si falló
+        if: steps.bot.outcome == 'failure'
+        run: |
+          curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage" \
+            -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+            -d "text=🚨 *ANSLV1 Bot falló en GitHub Actions*\n\n🔍 Revisa los logs:\nhttps://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
 
 
